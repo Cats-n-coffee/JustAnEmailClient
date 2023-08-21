@@ -16,11 +16,9 @@ namespace JustAnEmailClient
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            // builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<LoginPage>();
             builder.Services.AddSingleton<LoginPageViewModel>();
             builder.Services.AddSingleton<EmailClientPage>();
-            // builder.Services.AddSingleton<LoginPageViewModel>();
 
 #if DEBUG
             builder.Logging.AddDebug();
