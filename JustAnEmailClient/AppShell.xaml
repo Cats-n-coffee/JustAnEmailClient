@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="JustAnEmailClient.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:JustAnEmailClient"
+    xmlns:emailPage="clr-namespace:JustAnEmailClient.Views"
+    Shell.FlyoutBehavior="Disabled">
+
+    <ShellContent
+        Title="Client"
+        ContentTemplate="{DataTemplate emailPage:EmailClientPage}"
+        Route="EmailClientPage" />
+    
+    <ShellContent
+        Title="Login"
+        ContentTemplate="{DataTemplate local:LoginPage}"
+        Route="LoginPage" />
+
+</Shell>
