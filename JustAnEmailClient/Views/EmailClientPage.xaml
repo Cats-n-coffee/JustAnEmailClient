@@ -3,12 +3,33 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="JustAnEmailClient.Views.EmailClientPage"
              Title="EmailClientPage">
-    
-    <VerticalStackLayout>
-        <Label 
-            Text="Email client"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
-    
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <VerticalStackLayout Grid.Column="0" >
+            <Label 
+                Text="Email:"  />
+            <Entry
+                Text="{Binding Email}"
+                BackgroundColor="#333333"/>
+            <Label
+                Text="Password:" />
+            <Entry
+                Text="{Binding Password}"
+                BackgroundColor="#333333"/>
+            <Button Text="Send" Command="{Binding SendCommand}"/>
+        </VerticalStackLayout>
+
+        <VerticalStackLayout Grid.Column="1">
+            <Editor
+                Text="{Binding MessageContent}"
+                HeightRequest="500"
+                BackgroundColor="#333333"/>
+        </VerticalStackLayout>
+
+    </Grid>
+
 </ContentPage>
