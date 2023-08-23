@@ -1,4 +1,6 @@
-namespace JustAnEmailClient;
+using JustAnEmailClient.ViewModels;
+
+namespace JustAnEmailClient.Views;
 
 public partial class LoginPage : ContentPage
 {
