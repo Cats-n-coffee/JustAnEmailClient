@@ -24,7 +24,7 @@ public partial class LoginPageViewModel : ObservableObject
         */
         if (Email != null && Password != null)
         {
-            string combinedLine = $"{Email} - {Password}"; // Do some validation here
+            string combinedLine = $"{Email}-{Password}"; // Do some validation here
             FileSystemOperations.WriteToTextFile("creds.txt", combinedLine);
         }
     }

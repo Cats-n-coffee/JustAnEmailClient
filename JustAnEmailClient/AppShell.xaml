@@ -4,17 +4,19 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:JustAnEmailClient"
-    xmlns:emailPage="clr-namespace:JustAnEmailClient.Views"
-    Shell.FlyoutBehavior="Disabled">
+    xmlns:pages="clr-namespace:JustAnEmailClient.Views"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.TabBarIsVisible="False">
 
     <ShellContent
-        Title="Client"
-        ContentTemplate="{DataTemplate emailPage:EmailClientPage}"
+        ContentTemplate="{DataTemplate pages:LoadingPage}"
+        Route="LoadingPage"/>
+
+    <ShellContent
+        ContentTemplate="{DataTemplate pages:EmailClientPage}"
         Route="EmailClientPage" />
     
     <ShellContent
-        Title="Login"
-        ContentTemplate="{DataTemplate local:LoginPage}"
+        ContentTemplate="{DataTemplate pages:LoginPage}"
         Route="LoginPage" />
-
 </Shell>

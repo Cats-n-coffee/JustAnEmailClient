@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using JustAnEmailClient.Views;
+using JustAnEmailClient.ViewModels;
 
 namespace JustAnEmailClient
 {
@@ -16,9 +17,16 @@ namespace JustAnEmailClient
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            builder.Services.AddSingleton<LoginPage>();
+            builder.Services.AddSingleton<MainPage>();
+            // Check what this pattern is used for
+            /*builder.Services.AddSingleton<LoginPage>();
             builder.Services.AddSingleton<LoginPageViewModel>();
+
             builder.Services.AddSingleton<EmailClientPage>();
+            builder.Services.AddSingleton<EmailClientViewModel>();
+
+            builder.Services.AddSingleton<LoadingPage>();
+            builder.Services.AddSingleton<LoadingPageViewModel>();*/
 
 #if DEBUG
             builder.Logging.AddDebug();
