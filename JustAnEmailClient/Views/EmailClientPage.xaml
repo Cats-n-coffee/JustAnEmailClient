@@ -21,33 +21,16 @@
                 Text="{Binding Password}"
                 IsPassword="True"
                 BackgroundColor="#333333"/>
-            <Button Text="Send" Command="{Binding SendCommand}"/>
+            <Button Text="Send"/>
         </VerticalStackLayout>
 
-        <VerticalStackLayout Grid.Column="1">
- 
-            <HorizontalStackLayout HorizontalOptions="Fill">
-                <Label Text="To:" HorizontalOptions="Fill"/>
-                <Entry
-                    Text="{Binding SentTo}"
-                    BackgroundColor="#333333"
-                    MinimumWidthRequest="500"
-                    HorizontalOptions="Fill"/>
-            </HorizontalStackLayout>
-            <HorizontalStackLayout>
-                <Label Text="Subject:"/>
-                <Entry
-                    Text="{Binding Subject}"
-                    BackgroundColor="#333333"
-                    MinimumWidthRequest="500"
-                    HorizontalOptions="Fill"/>
-            </HorizontalStackLayout>
-
-            <Editor
-                Text="{Binding MessageContent}"
-                HeightRequest="400"
-                BackgroundColor="#333333"/>
-            
+        <VerticalStackLayout
+            Grid.Column="1"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
+            <Button
+                Text="New Message"
+                Command="{Binding OpenNewMessageCommand}"/>
         </VerticalStackLayout>
 
     </Grid>
