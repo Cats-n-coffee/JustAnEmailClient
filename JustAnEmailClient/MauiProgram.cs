@@ -21,6 +21,7 @@ namespace JustAnEmailClient
                 .ConfigureMauiHandlers(handlers =>
                 {
                     handlers.AddHandler(typeof(EntryView), typeof(EntryViewHandler));
+                    handlers.AddHandler(typeof(EditorView), typeof(EditorViewHandler));
                 });
 
             builder.Services.AddSingleton<MainPage>();
