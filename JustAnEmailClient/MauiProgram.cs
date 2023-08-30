@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using JustAnEmailClient.Controls;
+using JustAnEmailClient.Handlers;
 using JustAnEmailClient.Views;
 using JustAnEmailClient.ViewModels;
 
@@ -15,6 +17,10 @@ namespace JustAnEmailClient
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                })
+                .ConfigureMauiHandlers(handlers =>
+                {
+                    handlers.AddHandler(typeof(EntryView), typeof(EntryViewHandler));
                 });
 
             builder.Services.AddSingleton<MainPage>();

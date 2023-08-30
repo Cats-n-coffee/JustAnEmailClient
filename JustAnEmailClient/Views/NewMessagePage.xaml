@@ -1,24 +1,31 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:customControls="clr-namespace:JustAnEmailClient.Controls"
              x:Class="JustAnEmailClient.Views.NewMessagePage"
              BackgroundColor="{StaticResource Gray900}">
 
     <Grid RowDefinitions="140, *, 50">
 
-        <Grid Grid.Row="0" RowDefinitions="*, *" ColumnDefinitions="*, *">
-            <Label Grid.Row="0" Grid.Column="0" Text="To:" HorizontalOptions="Fill"/>
-            <Entry
+        <Grid Grid.Row="0" RowDefinitions="*, *, *" ColumnDefinitions="Auto, *">
+            <Label Grid.Row="0" Grid.Column="0" Text="From:"/>
+            <customControls:EntryView 
                 Grid.Row="0" Grid.Column="1"
+                BackgroundColor="{StaticResource Gray900}"
+                MinimumWidthRequest="500"
+                HorizontalOptions="Fill"/>
+            <Label Grid.Row="1" Grid.Column="0" Text="To:"/>
+            <customControls:EntryView
+                Grid.Row="1" Grid.Column="1"
                 Text="{Binding SentTo}"
                 BackgroundColor="{StaticResource Gray900}"
                 MinimumWidthRequest="500"
                 HorizontalOptions="Fill"/>
-            <Label Grid.Row="1" Grid.Column="0" Text="Subject:"/>
-            <Entry
-                Grid.Row="1" Grid.Column="1"
+            <Label Grid.Row="2" Grid.Column="0" Text="Subject:"/>
+            <customControls:EntryView
+                Grid.Row="2" Grid.Column="1"
                 Text="{Binding Subject}"
-                BackgroundColor="#333333"
+                BackgroundColor="{StaticResource Gray900}"
                 MinimumWidthRequest="500"
                 HorizontalOptions="Fill"/>
         </Grid>
