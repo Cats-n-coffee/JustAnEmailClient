@@ -70,7 +70,15 @@
 
         <HorizontalStackLayout Grid.Row="2" Margin="20, 10">
             <Button Text="Send" VerticalOptions="Center"/>
-            <Button Text="Delete" VerticalOptions="Center"/>
+            <ImageButton
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Source="trash.png"
+                BackgroundColor="white"
+                HeightRequest="24"
+                WidthRequest="24"
+                Padding="10"
+                CornerRadius="6"/>
         </HorizontalStackLayout>
     </Grid>
 
