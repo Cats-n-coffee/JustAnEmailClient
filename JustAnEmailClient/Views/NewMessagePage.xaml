@@ -55,12 +55,17 @@
             
             
         </Grid>
+
+        <VerticalStackLayout
+            Grid.Row="1"
+            BackgroundColor="{StaticResource GrayCustom1}">
             
-        <VerticalStackLayout Grid.Row="1">
             <customControls:EditorView
                 Text="{Binding MessageContent}"
                 MinimumHeightRequest="350"
-                BackgroundColor="{StaticResource GrayCustom1}"/>
+                BackgroundColor="{StaticResource GrayCustom1}"
+                Margin="20, 5"/>
+            
         </VerticalStackLayout>
 
         <HorizontalStackLayout Grid.Row="2" Margin="20, 10">
