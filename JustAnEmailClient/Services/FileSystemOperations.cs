@@ -11,7 +11,7 @@ public class FileSystemOperations
         {
             File.Delete(filePath);
         }
-        
+ 
         using FileStream outputStream = File.OpenWrite(filePath);
         using StreamWriter streamWriter = new StreamWriter(outputStream);
         
@@ -21,12 +21,18 @@ public class FileSystemOperations
     public static string ReadTextFileSync(string fileName)
     {
         string filePath = Path.Combine(FileSystem.Current.AppDataDirectory, fileName);
-
+ 
         // using FileStream fileStream = File.OpenRead(filePath);
         var reader = new StreamReader(filePath);
         var fileContents = reader.ReadToEnd();
         reader.Close();
 
         return fileContents;
+    }
+
+    // temporary until we have real creds management
+    public static string[] SeparateEmailAndPassword(string combinedCreds)
+    {
+        return combinedCreds.Split(new string[] { "---" }, StringSplitOptions.None);
     }
 }

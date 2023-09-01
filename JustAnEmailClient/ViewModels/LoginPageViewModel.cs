@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using JustAnEmailClient.Services;
+using JustAnEmailClient.Views;
 
 namespace JustAnEmailClient;
 
@@ -12,7 +13,7 @@ public partial class LoginPageViewModel : ObservableObject
     string password = "";
 
     [RelayCommand]
-    void Login()
+    async void Login()
     {
         /*
          This should be removed once the IMAP or POP3 server has been reached.
@@ -24,8 +25,21 @@ public partial class LoginPageViewModel : ObservableObject
         */
         if (Email != null && Password != null)
         {
-            string combinedLine = $"{Email}-{Password}"; // Do some validation here
+            string combinedLine = $"{Email}---{Password}"; // Do some validation here
             FileSystemOperations.WriteToTextFile("creds.txt", combinedLine);
+
+            if (DeviceInfo.Platform == DevicePlatform.WinUI)
+            {
+                Shell.Current.Dispatcher.Dispatch(async () =>
+                {
+                    await Task.Delay(1000);
+                    await Shell.Current.GoToAsync($"//{nameof(EmailClientPage)}");
+                });
+            }
+            else
+            {
+                await Shell.Current.GoToAsync($"//{nameof(EmailClientPage)}");
+            }
         }
     }
 }
