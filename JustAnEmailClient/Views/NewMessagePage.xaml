@@ -69,7 +69,10 @@
         </VerticalStackLayout>
 
         <HorizontalStackLayout Grid.Row="2" Margin="20, 10">
-            <Button Text="Send" VerticalOptions="Center"/>
+            <Button
+                Text="Send"
+                Command="{Binding SendCommand}"
+                VerticalOptions="Center"/>
             <ImageButton
                 VerticalOptions="Center"
                 HorizontalOptions="Center"

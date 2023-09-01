@@ -10,23 +10,9 @@
             <ColumnDefinition Width="200"/>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <VerticalStackLayout Grid.Column="0" >
-            <Label 
-                Text="Email:"  />
-            <Entry
-                Text="{Binding Email}"
-                BackgroundColor="#333333"/>
-            <Label
-                Text="Password:" />
-            <Entry
-                Text="{Binding Password}"
-                IsPassword="True"
-                BackgroundColor="#333333"/>
-            <Button Text="Send"/>
-        </VerticalStackLayout>
 
         <VerticalStackLayout
-            Grid.Column="1"
+            Grid.Column="0"
             HorizontalOptions="Center"
             VerticalOptions="Center">
             <Button

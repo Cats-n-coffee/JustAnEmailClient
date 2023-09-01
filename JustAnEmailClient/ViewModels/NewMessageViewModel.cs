@@ -21,11 +21,15 @@ public partial class NewMessageViewModel : ObservableObject
     void Send()
     {
         // Temporary
-        var userInfo = new UserInfo();
-        // userInfo.email = Email;
-        // userInfo.password = Password;
+        string creds = FileSystemOperations.ReadTextFileSync("creds.txt");
+        string[] splitCreds = FileSystemOperations.SeparateEmailAndPassword(creds);
 
-        // mailSender.SendEmail(userInfo, SentTo, Subject, MessageContent);
+        var userInfo = new UserInfo();
+        userInfo.email = splitCreds[0];
+        userInfo.password = splitCreds[1];
+
+        mailSender.SendEmail(userInfo, SentTo, Subject, MessageContent);
+        // TODO: close the current window after email is sent
     }
 
     /*

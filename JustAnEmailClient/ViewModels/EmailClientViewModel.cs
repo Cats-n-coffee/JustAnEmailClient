@@ -7,11 +7,6 @@ namespace JustAnEmailClient.ViewModels;
 
 public partial class EmailClientViewModel : ObservableObject
 {
-    [ObservableProperty]
-    string email = "";
-    [ObservableProperty]
-    string password = "";
-
     [RelayCommand]
     void OpenNewMessage()
     {
