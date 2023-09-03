@@ -16,7 +16,8 @@
                 VerticalOptions="Center"
                 Margin="0, 4, 20, 0"/>
             <StackLayout  Grid.Row="0" Grid.Column="1">
-                <customControls:EntryView 
+                <customControls:EntryView
+                    Text="{Binding SenderEmail}"
                     BackgroundColor="{StaticResource Gray900}"
                     MinimumWidthRequest="500"
                     HorizontalOptions="Fill"/>
