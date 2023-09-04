@@ -19,7 +19,7 @@ public class MailReceiver
             emailReceived.Subject = client.GetMessage(i).Headers.Subject;
             emailReceived.DateSent = client.GetMessage(i).Headers.DateSent.ToString();
             emailReceived.messageId = client.GetMessage(i).Headers.MessageId;
-            emailReceived.bodyAsText = client.GetMessage(i).FindFirstPlainTextVersion().GetBodyAsText();
+            emailReceived.BodyAsText = client.GetMessage(i).FindFirstPlainTextVersion().GetBodyAsText();
 
             allEmails.Add( emailReceived );
         }

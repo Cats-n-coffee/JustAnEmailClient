@@ -17,6 +17,9 @@ public partial class EmailClientViewModel : ObservableObject
         set => SetProperty(ref emailsReceived, value);
     }
 
+    [ObservableProperty]
+    string selectedMessage = "";
+ 
     [RelayCommand]
     void OpenNewMessage()
     {
@@ -33,5 +36,11 @@ public partial class EmailClientViewModel : ObservableObject
 
         List<EmailReceived> allEmails = MailReceiver.ReceiveEmailPop3(splitCreds[0], splitCreds[1]);
         EmailsReceived = new ObservableCollection<EmailReceived>(allEmails);
+    }
+
+    [RelayCommand]
+    void SelectMessage(EmailReceived msg)
+    {
+        SelectedMessage = msg.BodyAsText;
     }
 }

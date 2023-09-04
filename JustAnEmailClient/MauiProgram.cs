@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using JustAnEmailClient.Controls;
 using JustAnEmailClient.Handlers;
+using CommunityToolkit.Maui;
 using JustAnEmailClient.Views;
 using JustAnEmailClient.ViewModels;
 
@@ -13,6 +14,7 @@ namespace JustAnEmailClient
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
