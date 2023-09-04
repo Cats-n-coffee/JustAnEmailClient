@@ -3,22 +3,45 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="JustAnEmailClient.Views.EmailClientPage"
              Shell.TabBarIsVisible="False"
-             BackgroundColor="{StaticResource Gray900}">
+             BackgroundColor="{StaticResource GrayCustom1}">
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
+    <Grid ColumnDefinitions="Auto, *" Margin="10">
 
         <VerticalStackLayout
             Grid.Column="0"
             HorizontalOptions="Center"
-            VerticalOptions="Center">
+            VerticalOptions="Center"
+            Margin="0, 0, 10, 0">
             <Button
                 Text="New Message"
                 Command="{Binding OpenNewMessageCommand}"/>
+            <Button Text="Receive" Command="{Binding FetchPopCommand}"/>
         </VerticalStackLayout>
+
+        <Frame
+            Grid.Column="1"
+            BorderColor="{StaticResource Gray400}"
+            BackgroundColor="{StaticResource GrayCustom1}">
+            <VerticalStackLayout>
+                <ListView ItemsSource="{Binding EmailsReceived}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+
+                                <Grid ColumnDefinitions="200, *, Auto">
+                                    <Label Text="{Binding Subject}" Grid.Column="0"/>
+                                    <Label Text="body" Grid.Column="1"/>
+                                    <Label Text="{Binding DateSent}" Grid.Column="2"/>
+                                </Grid>
+
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </VerticalStackLayout>
+        </Frame>
+        
 
     </Grid>
 
