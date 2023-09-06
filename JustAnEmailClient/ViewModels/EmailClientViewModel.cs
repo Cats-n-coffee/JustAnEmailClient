@@ -19,6 +19,8 @@ public partial class EmailClientViewModel : ObservableObject
 
     [ObservableProperty]
     string selectedMessage = "";
+    [ObservableProperty]
+    string htmlBody = "";
  
     [RelayCommand]
     void OpenNewMessage()
@@ -42,5 +44,6 @@ public partial class EmailClientViewModel : ObservableObject
     void SelectMessage(EmailReceived msg)
     {
         SelectedMessage = msg.BodyAsText;
+        HtmlBody = msg.BodyAsHtml;
     }
 }

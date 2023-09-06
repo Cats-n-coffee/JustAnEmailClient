@@ -17,7 +17,7 @@
         <VerticalStackLayout
             Grid.Column="0"
             HorizontalOptions="Center"
-            VerticalOptions="Center"
+            VerticalOptions="Start"
             Margin="0, 0, 10, 0">
             <Button
                 Text="New Message"
@@ -44,10 +44,23 @@
                         <DataTemplate>
                             <ViewCell>
 
-                                <Grid ColumnDefinitions="200, *, Auto">
-                                    <Label Text="{Binding Subject}" Grid.Column="0"/>
-                                    <Label Text="body" Grid.Column="1"/>
-                                    <Label Text="{Binding DateSent}" Grid.Column="2"/>
+                                <Grid ColumnDefinitions="200, *, 150" Margin="0, 0, 0, 3">
+                                    <Label
+                                        Grid.Column="0"
+                                        Text="{Binding Sender}"
+                                        MaxLines="1"
+                                        LineBreakMode="TailTruncation"/>
+                                    <Label
+                                        Grid.Column="1"
+                                        Text="{Binding Subject}" 
+                                        MaxLines="1"
+                                        LineBreakMode="TailTruncation"
+                                        Margin="20, 0"/>
+                                    <Label
+                                        Grid.Column="2"
+                                        Text="{Binding DateSent}" 
+                                        MaxLines="1"
+                                        LineBreakMode="TailTruncation"/>
                                 </Grid>
 
                             </ViewCell>
@@ -57,7 +70,17 @@
 
                 <VerticalStackLayout Grid.Row="1">
                     <BoxView HeightRequest="1" Color="white"/>
-                    <Label Text="{Binding SelectedMessage}"/>
+                    <WebView
+                        BackgroundColor="Transparent"
+                        MinimumHeightRequest="600"
+                        MinimumWidthRequest="800"
+                        VerticalOptions="FillAndExpand"
+                        HorizontalOptions="FillAndExpand">
+                        <WebView.Source>
+                            <HtmlWebViewSource Html="{Binding HtmlBody}"/>
+                        </WebView.Source>
+                    </WebView>
+                    
                 </VerticalStackLayout>
                 
             </Grid>
