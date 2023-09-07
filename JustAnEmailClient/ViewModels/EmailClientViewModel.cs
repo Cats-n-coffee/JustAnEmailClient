@@ -36,7 +36,8 @@ public partial class EmailClientViewModel : ObservableObject
         string creds = FileSystemOperations.ReadTextFileSync("creds.txt");
         string[] splitCreds = FileSystemOperations.SeparateEmailAndPassword(creds);
 
-        List<EmailReceived> allEmails = MailReceiver.ReceiveEmailPop3(splitCreds[0], splitCreds[1]);
+        // List<EmailReceived> allEmails = MailReceiver.ReceiveEmailPop3(splitCreds[0], splitCreds[1]);
+        List<EmailReceived> allEmails = MailReceiver.ReceiveEmailImap4(splitCreds[0], splitCreds[1]);
         EmailsReceived = new ObservableCollection<EmailReceived>(allEmails);
     }
 
