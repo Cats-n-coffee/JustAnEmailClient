@@ -70,6 +70,27 @@
 
                 <VerticalStackLayout Grid.Row="1">
                     <BoxView HeightRequest="1" Color="white"/>
+                    <HorizontalStackLayout>
+                        <Button
+                            Text="Reply"
+                            Command="{Binding ReplyCommand}"
+                            FontSize="Caption"
+                            HeightRequest="20"/>
+                        <Button
+                            Text="Delete"
+                            Command="{Binding DeleteMessageCommand}"
+                            FontSize="Caption"
+                            HeightRequest="20"/>
+                        <Button
+                            Text="Forward"
+                            HeightRequest="20"
+                            FontSize="Caption"/>
+                        <Button 
+                            Text="Mark as Read"
+                            Command="{Binding MarkAsReadCommand}"
+                            HeightRequest="20"
+                            FontSize="Caption"/>
+                    </HorizontalStackLayout>
                     <WebView
                         BackgroundColor="Transparent"
                         MinimumHeightRequest="600"

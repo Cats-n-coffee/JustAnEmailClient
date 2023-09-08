@@ -23,7 +23,7 @@ public class MailReceiver
             emailReceived.Sender = client.GetMessage(i).Headers.From.ToString();
             emailReceived.Subject = client.GetMessage(i).Headers.Subject;
             emailReceived.DateSent = client.GetMessage(i).Headers.DateSent.ToString();
-            emailReceived.messageId = client.GetMessage(i).Headers.MessageId;
+            emailReceived.MessageId = client.GetMessage(i).Headers.MessageId;
             emailReceived.BodyAsText = client.GetMessage(i).FindFirstPlainTextVersion().GetBodyAsText();
  
             if (client.GetMessage(i).FindFirstHtmlVersion() != null)
@@ -44,7 +44,7 @@ public class MailReceiver
         client.Authenticate(email, password);
 
         var inbox = client.Inbox;
-        inbox.Open(FolderAccess.ReadOnly); // Change this for more operations?
+        inbox.Open(FolderAccess.ReadWrite);
 
         List<EmailReceived> allEmails = new List<EmailReceived>();
 
@@ -55,6 +55,9 @@ public class MailReceiver
             emailReceived.Sender = message.From.Mailboxes.FirstOrDefault().Address;
             emailReceived.Subject = message.Subject;
             emailReceived.DateSent = message.Date.ToString();
+            emailReceived.MessageId = message.MessageId;
+            
+            emailReceived.MessageFolder = inbox;
             // Add message ID once needed
 
             if (message.HtmlBody != null)
@@ -67,10 +70,17 @@ public class MailReceiver
                 emailReceived.BodyAsText = message.TextBody;
             }
 
+            // Get flags
+            var info = inbox.Fetch(new[] { i }, MessageSummaryItems.Flags);
+            if (info[0].Flags.Value.HasFlag(MessageFlags.Seen))
+            {
+                emailReceived.WasRead = true;
+            } else emailReceived.WasRead = false;
+
             allEmails.Add(emailReceived);
         }
 
-        client.Disconnect(true);
+        // client.Disconnect(true);
 
         return allEmails;
     }
