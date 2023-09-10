@@ -105,6 +105,7 @@
                             TextColor="{StaticResource Blue100Accent}"/>
                         <Button
                             Text="Forward"
+                            Command="{Binding ForwardMessageCommand}"
                             HeightRequest="20"
                             FontSize="Caption"
                             TextColor="{StaticResource Blue100Accent}"/>

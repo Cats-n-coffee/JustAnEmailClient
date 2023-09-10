@@ -62,15 +62,16 @@ public partial class EmailClientViewModel : ObservableObject
         selectedMessageId = msg.MessageId;
         messageFolder = msg.MessageFolder;
         selectedMessageSender = msg.Sender;
-        MarkAsText = ChooseMarkAsReadText(msg.MarkAsReadIcon);
 
         MessageDisplayIsVisible = true;
+        ToggleMarkAsRead();
     }
 
     [RelayCommand]
     void Reply()
     {
-        Debug.WriteLine($"REPLY: {selectedMessageSender}");
+        Window newMessageWindow = new Window(new NewMessagePage(selectedEmail.Sender));
+        Application.Current.OpenWindow(newMessageWindow);
     }
 
     [RelayCommand]
@@ -83,7 +84,8 @@ public partial class EmailClientViewModel : ObservableObject
     [RelayCommand]
     void ForwardMessage()
     {
-
+        Window newMessageWindow = new Window(new NewMessagePage());
+        Application.Current.OpenWindow(newMessageWindow);
     }
 
     [RelayCommand]

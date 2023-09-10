@@ -4,9 +4,14 @@ namespace JustAnEmailClient.Views;
 
 public partial class NewMessagePage : ContentPage
 {
-	public NewMessagePage()
+    public NewMessagePage()
+    {
+        InitializeComponent();
+        BindingContext = new NewMessageViewModel();
+    }
+    public NewMessagePage(string sentTo)
 	{
 		InitializeComponent();
-		BindingContext = new NewMessageViewModel();
+		BindingContext = new NewMessageViewModel(sentTo);
 	}
 }

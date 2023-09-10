@@ -21,6 +21,15 @@ public partial class NewMessageViewModel : ObservableObject
 
     MailSender mailSender = new MailSender();
 
+    public NewMessageViewModel()
+    {
+        SentTo = "";
+    }
+    public NewMessageViewModel(string sentTo)
+    { 
+        SentTo = sentTo;
+    }
+
     [RelayCommand]
     void Send()
     {
