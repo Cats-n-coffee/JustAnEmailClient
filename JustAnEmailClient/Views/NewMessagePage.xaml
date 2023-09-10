@@ -73,7 +73,8 @@
             <Button
                 Text="Send"
                 Command="{Binding SendCommand}"
-                VerticalOptions="Center"/>
+                VerticalOptions="Center"
+                TextColor="{StaticResource Blue100Accent}"/>
             <ImageButton
                 VerticalOptions="Center"
                 HorizontalOptions="Center"

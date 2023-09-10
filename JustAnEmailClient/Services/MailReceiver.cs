@@ -4,6 +4,7 @@ using MailKit.Net.Imap;
 using MimeKit;
 using JustAnEmailClient.Models;
 using System.Diagnostics;
+using MailKit.Search;
 
 namespace JustAnEmailClient.Services;
 
@@ -74,8 +75,8 @@ public class MailReceiver
             var info = inbox.Fetch(new[] { i }, MessageSummaryItems.Flags);
             if (info[0].Flags.Value.HasFlag(MessageFlags.Seen))
             {
-                emailReceived.WasRead = true;
-            } else emailReceived.WasRead = false;
+                emailReceived.MarkAsReadIcon = false;
+            } else emailReceived.MarkAsReadIcon = true;
 
             allEmails.Add(emailReceived);
         }
@@ -83,5 +84,15 @@ public class MailReceiver
         // client.Disconnect(true);
 
         return allEmails;
+    }
+
+    public static void MarkOrUnmarkAsRead(IMailFolder folder, string msgId, bool markAsRead)
+    {
+        var uid = folder.Search(SearchQuery.HeaderContains("Message-Id", msgId));
+        if (uid != null)
+        {
+            if(markAsRead) folder.AddFlags(uid, MessageFlags.Seen, true); 
+            else folder.RemoveFlags(uid, MessageFlags.Seen, true);
+        }
     }
 }

@@ -23,12 +23,17 @@ public partial class EmailClientViewModel : ObservableObject
     IMailFolder messageFolder = null; // This should be a wrapper around all the messages, will move
 
     string selectedMessageSender = "";
-    bool selectedMessageRead = false;
 
+    EmailReceived selectedEmail = null;
+
+    [ObservableProperty]
+    bool messageDisplayIsVisible = false;
     [ObservableProperty]
     string textBody = "";
     [ObservableProperty]
     string htmlBody = "";
+    [ObservableProperty]
+    string markAsText = "";
  
     [RelayCommand]
     void OpenNewMessage()
@@ -44,7 +49,6 @@ public partial class EmailClientViewModel : ObservableObject
         string creds = FileSystemOperations.ReadTextFileSync("creds.txt");
         string[] splitCreds = FileSystemOperations.SeparateEmailAndPassword(creds);
 
-        // List<EmailReceived> allEmails = MailReceiver.ReceiveEmailPop3(splitCreds[0], splitCreds[1]);
         List<EmailReceived> allEmails = MailReceiver.ReceiveEmailImap4(splitCreds[0], splitCreds[1]);
         EmailsReceived = new ObservableCollection<EmailReceived>(allEmails);
     }
@@ -52,12 +56,15 @@ public partial class EmailClientViewModel : ObservableObject
     [RelayCommand]
     void SelectMessage(EmailReceived msg)
     {
+        selectedEmail = msg;
         TextBody = msg.BodyAsText;
         HtmlBody = msg.BodyAsHtml;
         selectedMessageId = msg.MessageId;
         messageFolder = msg.MessageFolder;
         selectedMessageSender = msg.Sender;
-        selectedMessageRead = msg.WasRead; // does this belong here
+        MarkAsText = ChooseMarkAsReadText(msg.MarkAsReadIcon);
+
+        MessageDisplayIsVisible = true;
     }
 
     [RelayCommand]
@@ -80,8 +87,23 @@ public partial class EmailClientViewModel : ObservableObject
     }
 
     [RelayCommand]
-    void MarkAsRead()
+    void ToggleMarkAsRead()
     {
-        Debug.WriteLine($"READ OR NO: {selectedMessageRead}");
+        // Update UI
+        selectedEmail.MarkAsReadIcon = !selectedEmail.MarkAsReadIcon;
+        MarkAsText = ChooseMarkAsReadText(selectedEmail.MarkAsReadIcon);
+
+        // Boolean switch to match naming, since the icon shows when email is unread
+        MailReceiver.MarkOrUnmarkAsRead(
+            selectedEmail.MessageFolder,
+            selectedEmail.MessageId,
+            !selectedEmail.MarkAsReadIcon
+        );
+    }
+
+    // Helper Functions
+    static string ChooseMarkAsReadText(bool markAsReadIconStatus)
+    {
+        return markAsReadIconStatus ? "Mark as Read" : "Mark as Unread";
     }
 }

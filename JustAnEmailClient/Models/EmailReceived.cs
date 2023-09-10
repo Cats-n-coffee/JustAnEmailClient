@@ -1,8 +1,9 @@
-﻿using MailKit;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using MailKit;
 
 namespace JustAnEmailClient.Models;
 
-public class EmailReceived
+public partial class EmailReceived : ObservableObject
 {
     public string Sender { get; set; }
     public string Subject { get; set; }
@@ -10,7 +11,13 @@ public class EmailReceived
     public string MessageId {  get; set; }
     public string BodyAsText { get; set; }
     public string BodyAsHtml { get; set; }
-    public bool WasRead { get; set; }
+    
+    private bool _markAsReadIcon = false;
+    public bool MarkAsReadIcon
+    {
+        get => _markAsReadIcon;
+        set => SetProperty(ref _markAsReadIcon, value);
+    }
 
     public IMailFolder MessageFolder { get; set; }
 }

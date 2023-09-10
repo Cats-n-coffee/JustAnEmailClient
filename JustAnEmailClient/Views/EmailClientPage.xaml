@@ -21,8 +21,12 @@
             Margin="0, 0, 10, 0">
             <Button
                 Text="New Message"
-                Command="{Binding OpenNewMessageCommand}"/>
-            <Button Text="Receive" Command="{Binding FetchPopCommand}"/>
+                Command="{Binding OpenNewMessageCommand}"
+                TextColor="{StaticResource Blue100Accent}"/>
+            <Button
+                Text="Receive"
+                Command="{Binding FetchPopCommand}"
+                TextColor="{StaticResource Blue100Accent}"/>
         </VerticalStackLayout>
 
         <Frame
@@ -44,20 +48,33 @@
                         <DataTemplate>
                             <ViewCell>
 
-                                <Grid ColumnDefinitions="200, *, 150" Margin="0, 0, 0, 3">
-                                    <Label
+                                <Grid ColumnDefinitions="20, 200, *, 150" Margin="0, 0, 0, 3">
+                                    <Border
                                         Grid.Column="0"
+                                        HeightRequest="10"
+                                        WidthRequest="10"
+                                        HorizontalOptions="Start"
+                                        StrokeThickness="0"
+                                        BackgroundColor="{StaticResource Blue100Accent}"
+                                        Margin="0, 0, 10, 0"
+                                        IsVisible="{Binding MarkAsReadIcon}">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10"/>
+                                        </Border.StrokeShape>
+                                    </Border>
+                                    <Label
+                                        Grid.Column="1"
                                         Text="{Binding Sender}"
                                         MaxLines="1"
                                         LineBreakMode="TailTruncation"/>
                                     <Label
-                                        Grid.Column="1"
+                                        Grid.Column="2"
                                         Text="{Binding Subject}" 
                                         MaxLines="1"
                                         LineBreakMode="TailTruncation"
                                         Margin="20, 0"/>
                                     <Label
-                                        Grid.Column="2"
+                                        Grid.Column="3"
                                         Text="{Binding DateSent}" 
                                         MaxLines="1"
                                         LineBreakMode="TailTruncation"/>
@@ -68,28 +85,35 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-                <VerticalStackLayout Grid.Row="1">
+                <VerticalStackLayout
+                    Grid.Row="1"
+                    IsVisible="{Binding MessageDisplayIsVisible}">
+                    
                     <BoxView HeightRequest="1" Color="white"/>
                     <HorizontalStackLayout>
                         <Button
                             Text="Reply"
                             Command="{Binding ReplyCommand}"
                             FontSize="Caption"
-                            HeightRequest="20"/>
+                            HeightRequest="20"
+                            TextColor="{StaticResource Blue100Accent}"/>
                         <Button
                             Text="Delete"
                             Command="{Binding DeleteMessageCommand}"
                             FontSize="Caption"
-                            HeightRequest="20"/>
+                            HeightRequest="20"
+                            TextColor="{StaticResource Blue100Accent}"/>
                         <Button
                             Text="Forward"
                             HeightRequest="20"
-                            FontSize="Caption"/>
+                            FontSize="Caption"
+                            TextColor="{StaticResource Blue100Accent}"/>
                         <Button 
-                            Text="Mark as Read"
-                            Command="{Binding MarkAsReadCommand}"
+                            Text="{Binding MarkAsText}"
+                            Command="{Binding ToggleMarkAsReadCommand}"
                             HeightRequest="20"
-                            FontSize="Caption"/>
+                            FontSize="Caption"
+                            TextColor="{StaticResource Blue100Accent}"/>
                     </HorizontalStackLayout>
                     <WebView
                         BackgroundColor="Transparent"
