@@ -32,6 +32,11 @@ public partial class EmailClientViewModel : ObservableObject
     string htmlBody = "";
     [ObservableProperty]
     string markAsText = "";
+
+    public EmailClientViewModel()
+    {
+        FetchMessages();
+    }
  
     [RelayCommand]
     void OpenNewMessage()
@@ -41,7 +46,7 @@ public partial class EmailClientViewModel : ObservableObject
     }
 
     [RelayCommand]
-    void FetchPop()
+    void FetchMessages()
     {
         string creds = FileSystemOperations.ReadTextFileSync("creds.txt");
         string[] splitCreds = FileSystemOperations.SeparateEmailAndPassword(creds);

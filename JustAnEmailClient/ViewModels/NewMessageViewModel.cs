@@ -26,13 +26,14 @@ public partial class NewMessageViewModel : ObservableObject
     bool isWebViewVisible = false;
     [ObservableProperty]
     bool isTextViewVisible = false;
+    [ObservableProperty]
+    int editorMinHeight = 350;
 
+    // Content of existing messages
     [ObservableProperty]
     string textBody = "";
     [ObservableProperty]
     string htmlBody = "";
-    [ObservableProperty]
-    int editorMinHeight = 350;
 
     MailSender mailSender = new MailSender();
 
@@ -69,7 +70,9 @@ public partial class NewMessageViewModel : ObservableObject
         userInfo.password = splitCreds[1];
 
         mailSender.SendEmail(userInfo, SentTo, Subject, MessageContent);
-        // TODO: close the current window after email is sent
+        // TODO: try again in the future, GetParentWindow not found
+        Application.Current?.CloseWindow(Application.Current.Windows[1]);
+        // Application.Current.CloseWindow(GetParentWindow());
     }
 
     static string[] RetrieveCredsFromFile(string filename)
@@ -79,14 +82,4 @@ public partial class NewMessageViewModel : ObservableObject
 
         return splitCreds;
     }
-
-    /*
-    [RelayCommand]
-    void Which()
-    {
-        Debug.WriteLine(Application.Current.Windows);
-        Debug.WriteLine(Application.Current.Windows.Count);
-        Debug.WriteLine(Microsoft.Maui.Controls.Window.PageProperty);
-    }
-    */
 }

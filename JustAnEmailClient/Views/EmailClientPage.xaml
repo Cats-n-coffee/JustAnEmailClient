@@ -25,7 +25,7 @@
                 TextColor="{StaticResource Blue100Accent}"/>
             <Button
                 Text="Receive"
-                Command="{Binding FetchPopCommand}"
+                Command="{Binding FetchMessagesCommand}"
                 TextColor="{StaticResource Blue100Accent}"/>
         </VerticalStackLayout>
 
