@@ -22,8 +22,6 @@ public partial class EmailClientViewModel : ObservableObject
     string selectedMessageId = "";
     IMailFolder messageFolder = null; // This should be a wrapper around all the messages, will move
 
-    string selectedMessageSender = "";
-
     EmailReceived selectedEmail = null;
 
     [ObservableProperty]
@@ -38,7 +36,6 @@ public partial class EmailClientViewModel : ObservableObject
     [RelayCommand]
     void OpenNewMessage()
     {
-        Debug.WriteLine(Application.Current.Windows.Count);
         Window newMessageWindow = new Window(new NewMessagePage());
         Application.Current.OpenWindow(newMessageWindow);
     }
@@ -61,16 +58,18 @@ public partial class EmailClientViewModel : ObservableObject
         HtmlBody = msg.BodyAsHtml;
         selectedMessageId = msg.MessageId;
         messageFolder = msg.MessageFolder;
-        selectedMessageSender = msg.Sender;
 
         MessageDisplayIsVisible = true;
-        ToggleMarkAsRead();
+
+        // Next line is needed to set the text on message display
+        MarkAsText = ChooseMarkAsReadText(selectedEmail.MarkAsReadIcon);
+        if (msg.MarkAsReadIcon) ToggleMarkAsRead();
     }
 
     [RelayCommand]
     void Reply()
     {
-        Window newMessageWindow = new Window(new NewMessagePage(selectedEmail.Sender));
+        Window newMessageWindow = new Window(new NewMessagePage(selectedEmail, false));
         Application.Current.OpenWindow(newMessageWindow);
     }
 
@@ -84,7 +83,7 @@ public partial class EmailClientViewModel : ObservableObject
     [RelayCommand]
     void ForwardMessage()
     {
-        Window newMessageWindow = new Window(new NewMessagePage());
+        Window newMessageWindow = new Window(new NewMessagePage(selectedEmail, true));
         Application.Current.OpenWindow(newMessageWindow);
     }
 

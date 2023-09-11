@@ -1,4 +1,5 @@
 using JustAnEmailClient.ViewModels;
+using JustAnEmailClient.Models;
 
 namespace JustAnEmailClient.Views;
 
@@ -9,9 +10,9 @@ public partial class NewMessagePage : ContentPage
         InitializeComponent();
         BindingContext = new NewMessageViewModel();
     }
-    public NewMessagePage(string sentTo)
+    public NewMessagePage(EmailReceived emailData, bool isForwarded)
 	{
 		InitializeComponent();
-		BindingContext = new NewMessageViewModel(sentTo);
+		BindingContext = new NewMessageViewModel(emailData, isForwarded);
 	}
 }

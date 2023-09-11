@@ -19,15 +19,45 @@ public partial class NewMessageViewModel : ObservableObject
     [ObservableProperty]
     string messageContent = "";
 
+    // Visibily of UI elements
+    [ObservableProperty]
+    bool isEditorVisible = true;
+    [ObservableProperty]
+    bool isWebViewVisible = false;
+    [ObservableProperty]
+    bool isTextViewVisible = false;
+
+    [ObservableProperty]
+    string textBody = "";
+    [ObservableProperty]
+    string htmlBody = "";
+    [ObservableProperty]
+    int editorMinHeight = 350;
+
     MailSender mailSender = new MailSender();
 
-    public NewMessageViewModel()
+    public NewMessageViewModel() {}
+    public NewMessageViewModel(EmailReceived emailData, bool isForwarded)
     {
-        SentTo = "";
-    }
-    public NewMessageViewModel(string sentTo)
-    { 
-        SentTo = sentTo;
+        if (isForwarded) SentTo = "";
+        else SentTo = emailData?.Sender;
+
+        if (isForwarded) Subject = $"Fwd: {emailData?.Subject}";
+        else Subject = $"Re: {emailData?.Subject}";
+
+        if (emailData?.BodyAsHtml != null)
+        {
+            HtmlBody = emailData?.BodyAsHtml;
+            IsWebViewVisible = true;
+            IsTextViewVisible = false;
+        } else
+        {
+            TextBody = emailData?.BodyAsText;
+            IsWebViewVisible = false;
+            IsTextViewVisible = true;
+        }
+
+        EditorMinHeight = 100;
     }
 
     [RelayCommand]
