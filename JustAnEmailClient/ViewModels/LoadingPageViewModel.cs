@@ -7,16 +7,19 @@ namespace JustAnEmailClient.ViewModels;
 
 public partial class LoadingPageViewModel : ObservableObject
 {
-    // Ideally, this is the page that would check for creds
-    // to be stored and decide which page to navigate to
+    ImapService imapServiceInstance = null;
+    string credentials = string.Empty;
     public LoadingPageViewModel() {
+        credentials = FileSystemOperations.ReadTextFileSync("creds.txt");
+        string[] splitCreds = FileSystemOperations.SeparateEmailAndPassword(credentials);
+
+        imapServiceInstance = new ImapService(splitCreds[0], splitCreds[1]);
+
         Reroute();
     }
     public async void Reroute()
     {
-        string credentials = FileSystemOperations.ReadTextFileSync("creds.txt");
-        Debug.WriteLine(credentials);
-        Debug.WriteLine(DeviceInfo.Platform);
+        
 
         if (credentials != null && credentials.Length > 1)
         {
@@ -25,7 +28,11 @@ public partial class LoadingPageViewModel : ObservableObject
                 Shell.Current.Dispatcher.Dispatch(async () =>
                 {
                     await Task.Delay(1000);
-                    await Shell.Current.GoToAsync($"//{nameof(EmailClientPage)}");
+                    await Shell.Current.GoToAsync(
+                        $"//{nameof(EmailClientPage)}",
+                        true,
+                        new Dictionary<string, object> { { "ImapServiceInstance", imapServiceInstance } }
+                    );
                 });
             } else
             {

@@ -10,8 +10,22 @@ using MailKit.Search;
 
 namespace JustAnEmailClient.ViewModels;
 
+[QueryProperty(nameof(imapServiceInstance), "ImapServiceInstance")]
 public partial class EmailClientViewModel : ObservableObject
 {
+    ImapService imapServiceInstance = null;
+    ImapService ImapServiceInstance
+    {
+        get => imapServiceInstance;
+        set
+        {
+            if (imapServiceInstance == null)
+            {
+                SetProperty(ref imapServiceInstance, value);
+            }
+        }
+    }
+
     public ObservableCollection<EmailReceived> emailsReceived = new ObservableCollection<EmailReceived>();
     public ObservableCollection<EmailReceived> EmailsReceived
     {
