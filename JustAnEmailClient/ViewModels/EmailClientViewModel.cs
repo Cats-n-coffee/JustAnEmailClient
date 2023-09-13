@@ -51,7 +51,7 @@ public partial class EmailClientViewModel : ObservableObject
         string creds = FileSystemOperations.ReadTextFileSync("creds.txt");
         string[] splitCreds = FileSystemOperations.SeparateEmailAndPassword(creds);
 
-        List<EmailReceived> allEmails = MailReceiver.ReceiveEmailImap4(splitCreds[0], splitCreds[1]);
+        List<EmailReceived> allEmails = ImapService.ReceiveEmailImap4(splitCreds[0], splitCreds[1]);
         EmailsReceived = new ObservableCollection<EmailReceived>(allEmails);
     }
 
@@ -81,8 +81,7 @@ public partial class EmailClientViewModel : ObservableObject
     [RelayCommand]
     void DeleteMessage() 
     {
-        var uid = messageFolder.Search(SearchQuery.HeaderContains("Message-Id", selectedMessageId));
-        messageFolder.AddFlags(uid, MessageFlags.Deleted, true);
+        ImapService.DeleteMessage(messageFolder, selectedMessageId);
     }
 
     [RelayCommand]
@@ -100,7 +99,7 @@ public partial class EmailClientViewModel : ObservableObject
         MarkAsText = ChooseMarkAsReadText(selectedEmail.MarkAsReadIcon);
 
         // Boolean switch to match naming, since the icon shows when email is unread
-        MailReceiver.MarkOrUnmarkAsRead(
+        ImapService.MarkOrUnmarkAsRead(
             selectedEmail.MessageFolder,
             selectedEmail.MessageId,
             !selectedEmail.MarkAsReadIcon
