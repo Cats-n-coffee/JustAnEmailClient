@@ -6,24 +6,18 @@ using JustAnEmailClient.Models;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
 using MailKit;
-using MailKit.Search;
 
 namespace JustAnEmailClient.ViewModels;
 
-[QueryProperty(nameof(imapServiceInstance), "ImapServiceInstance")]
 public partial class EmailClientViewModel : ObservableObject
 {
     ImapService imapServiceInstance = null;
-    ImapService ImapServiceInstance
+
+    public ObservableCollection<IMailFolder> folderList = new ObservableCollection<IMailFolder>();
+    public ObservableCollection<IMailFolder> FolderList
     {
-        get => imapServiceInstance;
-        set
-        {
-            if (imapServiceInstance == null)
-            {
-                SetProperty(ref imapServiceInstance, value);
-            }
-        }
+        get => folderList;
+        set => SetProperty(ref folderList, value);
     }
 
     public ObservableCollection<EmailReceived> emailsReceived = new ObservableCollection<EmailReceived>();
@@ -49,7 +43,14 @@ public partial class EmailClientViewModel : ObservableObject
 
     public EmailClientViewModel()
     {
+        string credentials = FileSystemOperations.ReadTextFileSync("creds.txt");
+        string[] splitCreds = FileSystemOperations.SeparateEmailAndPassword(credentials);
+
+        imapServiceInstance = new ImapService(splitCreds[0], splitCreds[1]);
+
         FetchMessages();
+        var allFolders = imapServiceInstance.GetFolders();
+        FolderList = new ObservableCollection<IMailFolder>(allFolders);
     }
  
     [RelayCommand]
@@ -62,11 +63,19 @@ public partial class EmailClientViewModel : ObservableObject
     [RelayCommand]
     void FetchMessages()
     {
-        string creds = FileSystemOperations.ReadTextFileSync("creds.txt");
-        string[] splitCreds = FileSystemOperations.SeparateEmailAndPassword(creds);
-
-        List<EmailReceived> allEmails = ImapService.ReceiveEmailImap4(splitCreds[0], splitCreds[1]);
+        List<EmailReceived> allEmails = imapServiceInstance.GetInboxMessages();
         EmailsReceived = new ObservableCollection<EmailReceived>(allEmails);
+    }
+
+    [RelayCommand]
+    void SelectFolder(IMailFolder folder)
+    {
+        if (folder == null) { Debug.WriteLine($"clicked folder was null"); }
+        else
+        {
+            List<EmailReceived> folderMessages = imapServiceInstance.GetFolderMessages(folder);
+            EmailsReceived = new ObservableCollection<EmailReceived>(folderMessages);
+        }
     }
 
     [RelayCommand]

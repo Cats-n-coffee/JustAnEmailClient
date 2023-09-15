@@ -23,6 +23,12 @@ public class ImapService
         return client;
     }
 
+    public List<EmailReceived> GetInboxMessages() 
+    {
+        imapClient.Inbox.Open(FolderAccess.ReadWrite);
+        return GetFolderMessages(imapClient.Inbox);
+    }
+
     public IList<IMailFolder> GetFolders()
     {
         var folders = imapClient.GetFolders(new FolderNamespace('.', "")); // use async
@@ -30,7 +36,7 @@ public class ImapService
         // Make new class model for folders
         foreach (var folder in folders)
         {
-            Debug.WriteLine("[folder] {0}", folder.FullName);
+            Debug.WriteLine($"{folder.FullName}");
         }
 
         return folders;
@@ -38,8 +44,11 @@ public class ImapService
 
     public List<EmailReceived> GetFolderMessages(IMailFolder folder)
     {
+        Debug.WriteLine($"getting messages {folder.Name}");
+        folder.Open(FolderAccess.ReadWrite);
         List<EmailReceived> emails = new List<EmailReceived>();
-
+        Debug.WriteLine($"count {folder.Count}");
+ 
         for (int i = 0; i < folder.Count; i++)
         {
             var message = folder.GetMessage(i);
