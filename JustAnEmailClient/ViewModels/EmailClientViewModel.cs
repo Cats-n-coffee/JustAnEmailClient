@@ -33,7 +33,12 @@ public partial class EmailClientViewModel : ObservableObject
     EmailReceived selectedEmail = null;
 
     [ObservableProperty]
+    bool noMessageIsVisible = false;
+    [ObservableProperty]
+    bool messageListIsVisible = true;
+    [ObservableProperty]
     bool messageDisplayIsVisible = false;
+    
     [ObservableProperty]
     string textBody = "";
     [ObservableProperty]
@@ -50,7 +55,8 @@ public partial class EmailClientViewModel : ObservableObject
 
         FetchMessages();
         var allFolders = imapServiceInstance.GetFolders();
-        FolderList = new ObservableCollection<Folder>(allFolders);
+        var sortedFolders = Folder.SortFolders(allFolders);
+        FolderList = new ObservableCollection<Folder>(sortedFolders);
     }
  
     [RelayCommand]
@@ -68,13 +74,25 @@ public partial class EmailClientViewModel : ObservableObject
     }
 
     [RelayCommand]
-    void SelectFolder(IMailFolder folder)
+    void SelectFolder(Folder folder)
     {
         if (folder == null) { Debug.WriteLine($"clicked folder was null"); }
         else
         {
-            List<EmailReceived> folderMessages = imapServiceInstance.GetFolderMessages(folder);
+            List<EmailReceived> folderMessages = imapServiceInstance.GetFolderMessages(folder.MailFolder);
             EmailsReceived = new ObservableCollection<EmailReceived>(folderMessages);
+  
+            if (folderMessages.Count > 0)
+            {
+                NoMessageIsVisible = false;
+                MessageListIsVisible = true;
+
+            }
+            else
+            {
+                NoMessageIsVisible = true;
+                MessageListIsVisible = false;
+            }
         }
     }
 
