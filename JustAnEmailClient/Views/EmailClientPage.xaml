@@ -48,12 +48,12 @@
                                     Grid.Column="0"
                                     WidthRequest="16"
                                     HeightRequest="16"
-                                    Source="inbox.png"
+                                    Source="{Binding ImageFile}"
                                     HorizontalOptions="Center"
                                     VerticalOptions="Center" />
                                 <Label
                                     Grid.Column="1"
-                                    Text="{Binding FullName}"
+                                    Text="{Binding Name}"
                                     MaxLines="1"
                                     LineBreakMode="TailTruncation"
                                     Margin="12, 0, 0, 0"

@@ -29,14 +29,20 @@ public class ImapService
         return GetFolderMessages(imapClient.Inbox);
     }
 
-    public IList<IMailFolder> GetFolders()
+    public List<Folder> GetFolders()
     {
-        var folders = imapClient.GetFolders(new FolderNamespace('.', "")); // use async
-        // store folders inside class?
-        // Make new class model for folders
-        foreach (var folder in folders)
+        var incomingFolders = imapClient.GetFolders(new FolderNamespace('.', "")); // use async
+        List<Folder> folders = new List<Folder>();
+  
+        foreach (var incomingFolder in incomingFolders)
         {
-            Debug.WriteLine($"{folder.FullName}");
+            Folder folder = new Folder();
+            folder.Name = incomingFolder.FullName;
+            folder.Id = incomingFolder.Id;
+            folder.ImageFile = NameToImage.nameToImage.GetValueOrDefault(folder.Name.ToLower(), "folder.png");
+            folder.MailFolder = incomingFolder;
+
+            folders.Add(folder);
         }
 
         return folders;

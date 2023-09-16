@@ -13,8 +13,8 @@ public partial class EmailClientViewModel : ObservableObject
 {
     ImapService imapServiceInstance = null;
 
-    public ObservableCollection<IMailFolder> folderList = new ObservableCollection<IMailFolder>();
-    public ObservableCollection<IMailFolder> FolderList
+    public ObservableCollection<Folder> folderList = new ObservableCollection<Folder>();
+    public ObservableCollection<Folder> FolderList
     {
         get => folderList;
         set => SetProperty(ref folderList, value);
@@ -50,7 +50,7 @@ public partial class EmailClientViewModel : ObservableObject
 
         FetchMessages();
         var allFolders = imapServiceInstance.GetFolders();
-        FolderList = new ObservableCollection<IMailFolder>(allFolders);
+        FolderList = new ObservableCollection<Folder>(allFolders);
     }
  
     [RelayCommand]
