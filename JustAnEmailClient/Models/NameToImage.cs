@@ -9,7 +9,7 @@ public class NameToImage
         {
             {"archive", "archive.png"},
             {"deleted", "bin.png"},
-            {"draft", "draft.png"},
+            {"drafts", "draft.png"},
             {"inbox", "inbox.png"},
             {"junk", "junk.png"},
             {"notes", "note.png"},

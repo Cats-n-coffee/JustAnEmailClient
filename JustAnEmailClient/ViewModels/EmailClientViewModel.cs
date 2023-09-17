@@ -101,7 +101,6 @@ public partial class EmailClientViewModel : ObservableObject
     {
         selectedEmail = msg;
         TextBody = msg.BodyAsText;
-        HtmlBody = msg.BodyAsHtml;
         selectedMessageId = msg.MessageId;
         messageFolder = msg.MessageFolder;
 
@@ -110,6 +109,11 @@ public partial class EmailClientViewModel : ObservableObject
         // Next line is needed to set the text on message display
         MarkAsText = ChooseMarkAsReadText(selectedEmail.MarkAsReadIcon);
         if (msg.MarkAsReadIcon) ToggleMarkAsRead();
+
+        var visitor = new HtmlPreviewVisitor();
+        msg.OriginalMessage.Accept(visitor);
+
+        HtmlBody = visitor.HtmlBody;
     }
 
     [RelayCommand]

@@ -63,9 +63,8 @@ public class ImapService
             emailReceived.Subject = message.Subject;
             emailReceived.DateSent = message.Date.ToString();
             emailReceived.MessageId = message.MessageId;
-
+            emailReceived.OriginalMessage = message;
             emailReceived.MessageFolder = folder;
-            // Add message ID once needed
 
             if (message.HtmlBody != null)
             {
@@ -90,62 +89,6 @@ public class ImapService
 
         // Dispose at the end? if we do, we need another method to reopen connection?
         return emails;
-    }
-
-    public static List<EmailReceived> ReceiveEmailImap4(string email, string password)
-    {
-        var client = new ImapClient();
-        client.Connect("outlook.office365.com", 993, true);
-        client.Authenticate(email, password);
-
-        var inbox = client.Inbox;
-        inbox.Open(FolderAccess.ReadWrite);
-
-        var folders = client.GetFolders(new FolderNamespace('.', "")); // use async
-
-        foreach (var folder in folders)
-        {
-            Debug.WriteLine("[folder] {0}", folder.FullName);
-        }
-
-        List<EmailReceived> allEmails = new List<EmailReceived>();
-
-        for (int i = 0; i < inbox.Count; i++)
-        {
-            var message = inbox.GetMessage(i);
-            EmailReceived emailReceived = new EmailReceived();
-            emailReceived.Sender = message.From.Mailboxes.FirstOrDefault().Address;
-            emailReceived.Subject = message.Subject;
-            emailReceived.DateSent = message.Date.ToString();
-            emailReceived.MessageId = message.MessageId;
-
-            emailReceived.MessageFolder = inbox;
-            // Add message ID once needed
-
-            if (message.HtmlBody != null)
-            {
-                emailReceived.BodyAsHtml = message.HtmlBody;
-            }
-
-            if (message.TextBody != null)
-            {
-                emailReceived.BodyAsText = message.TextBody;
-            }
-
-            // Get flags
-            var info = inbox.Fetch(new[] { i }, MessageSummaryItems.Flags);
-            if (info[0].Flags.Value.HasFlag(MessageFlags.Seen))
-            {
-                emailReceived.MarkAsReadIcon = false;
-            }
-            else emailReceived.MarkAsReadIcon = true;
-
-            allEmails.Add(emailReceived);
-        }
-
-        // client.Disconnect(true);
-
-        return allEmails;
     }
 
     public static void MarkOrUnmarkAsRead(IMailFolder folder, string msgId, bool markAsRead)
