@@ -10,9 +10,9 @@ public partial class NewMessagePage : ContentPage
         InitializeComponent();
         BindingContext = new NewMessageViewModel();
     }
-    public NewMessagePage(EmailReceived emailData, bool isForwarded)
+    public NewMessagePage(EmailReceived emailData, bool isForwarded, bool isReply)
 	{
 		InitializeComponent();
-		BindingContext = new NewMessageViewModel(emailData, isForwarded);
+		BindingContext = new NewMessageViewModel(emailData, isForwarded, isReply);
 	}
 }

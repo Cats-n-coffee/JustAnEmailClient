@@ -10,6 +10,10 @@ public partial class NewMessageViewModel : ObservableObject
 {
     static string[] splitCreds = RetrieveCredsFromFile("creds.txt");
 
+    EmailReceived emailToReplyOrForward = null;
+    bool isForwardedMsg = false;
+    bool isReplyMsg = false;
+
     [ObservableProperty]
     string senderEmail = splitCreds[0];
     [ObservableProperty]
@@ -35,12 +39,18 @@ public partial class NewMessageViewModel : ObservableObject
     [ObservableProperty]
     string htmlBody = "";
 
-    MailSender mailSender = new MailSender();
-
     public NewMessageViewModel() {}
-    public NewMessageViewModel(EmailReceived emailData, bool isForwarded)
+    public NewMessageViewModel(EmailReceived emailData, bool isForwarded, bool isReply)
     {
-        if (isForwarded) SentTo = "";
+        emailToReplyOrForward = emailData;
+
+        if (isReply) isReplyMsg = true;
+
+        if (isForwarded)
+        {
+            SentTo = "";
+            isForwardedMsg = true;
+        }
         else SentTo = emailData?.Sender;
 
         if (isForwarded) Subject = $"Fwd: {emailData?.Subject}";
@@ -48,7 +58,9 @@ public partial class NewMessageViewModel : ObservableObject
 
         if (emailData?.BodyAsHtml != null)
         {
-            HtmlBody = emailData?.BodyAsHtml;
+            var visitor = new HtmlPreviewVisitor();
+            emailData?.OriginalMessage.Accept(visitor);
+            HtmlBody = visitor.HtmlBody;
             IsWebViewVisible = true;
             IsTextViewVisible = false;
         } else
@@ -69,7 +81,18 @@ public partial class NewMessageViewModel : ObservableObject
         userInfo.email = splitCreds[0];
         userInfo.password = splitCreds[1];
 
-        mailSender.SendEmail(userInfo, SentTo, Subject, MessageContent);
+        var newMessage = new MessageToSend();
+        newMessage.Sender = userInfo.email;
+        newMessage.Subject = Subject;
+        newMessage.Recipient = SentTo;
+        newMessage.MessageContent = MessageContent; // This is the content we just typed
+
+        if (emailToReplyOrForward != null)
+        {
+            newMessage.OriginalMessage = emailToReplyOrForward.OriginalMessage; // This is some original message
+        }
+
+        MailSender.SendEmail(userInfo, newMessage, isForwardedMsg, isReplyMsg);
         // TODO: try again in the future, GetParentWindow not found
         Application.Current?.CloseWindow(Application.Current.Windows[1]);
         // Application.Current.CloseWindow(GetParentWindow());

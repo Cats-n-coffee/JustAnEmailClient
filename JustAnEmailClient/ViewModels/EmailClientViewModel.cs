@@ -119,7 +119,7 @@ public partial class EmailClientViewModel : ObservableObject
     [RelayCommand]
     void Reply()
     {
-        Window newMessageWindow = new Window(new NewMessagePage(selectedEmail, false));
+        Window newMessageWindow = new Window(new NewMessagePage(selectedEmail, false, true));
         Application.Current.OpenWindow(newMessageWindow);
     }
 
@@ -132,7 +132,7 @@ public partial class EmailClientViewModel : ObservableObject
     [RelayCommand]
     void ForwardMessage()
     {
-        Window newMessageWindow = new Window(new NewMessagePage(selectedEmail, true));
+        Window newMessageWindow = new Window(new NewMessagePage(selectedEmail, true, false));
         Application.Current.OpenWindow(newMessageWindow);
     }
 
