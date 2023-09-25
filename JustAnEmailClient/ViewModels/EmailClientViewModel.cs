@@ -53,10 +53,24 @@ public partial class EmailClientViewModel : ObservableObject
 
         imapServiceInstance = new ImapService(splitCreds[0], splitCreds[1]);
 
+        CreateTimer();
+
         FetchMessages();
         var allFolders = imapServiceInstance.GetFolders();
         var sortedFolders = Folder.SortFolders(allFolders);
-        FolderList = new ObservableCollection<Folder>(sortedFolders);
+        FolderList = new ObservableCollection<Folder>(sortedFolders); 
+    }
+
+    private void CreateTimer()
+    {
+        Task.Run(async () =>
+        {
+            while(true) // probably replaced with imap server connection check?
+            {
+                await Task.Delay(100000);
+                FetchMessages();
+            }
+        });
     }
  
     [RelayCommand]
@@ -127,6 +141,14 @@ public partial class EmailClientViewModel : ObservableObject
     void DeleteMessage() 
     {
         ImapService.DeleteMessage(messageFolder, selectedMessageId);
+        Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            FetchMessages();
+        });
+        
+        // Reset the Webview and toolbar
+        MessageDisplayIsVisible = false;
     }
 
     [RelayCommand]

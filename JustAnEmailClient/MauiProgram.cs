@@ -2,8 +2,6 @@
 using JustAnEmailClient.Controls;
 using JustAnEmailClient.Handlers;
 using CommunityToolkit.Maui;
-using JustAnEmailClient.Views;
-using JustAnEmailClient.ViewModels;
 
 namespace JustAnEmailClient
 {
