@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Diagnostics;
+using System.Timers;
 using JustAnEmailClient.Services;
 using JustAnEmailClient.Models;
+using JustAnEmailClient.Helpers;
 
 namespace JustAnEmailClient.ViewModels;
 
@@ -32,6 +34,8 @@ public partial class NewMessageViewModel : ObservableObject
     bool isTextViewVisible = false;
     [ObservableProperty]
     int editorMinHeight = 350;
+    [ObservableProperty]
+    string sentToErrorBackground = "White";
 
     // Content of existing messages
     [ObservableProperty]
@@ -76,26 +80,41 @@ public partial class NewMessageViewModel : ObservableObject
     [RelayCommand]
     void Send()
     {
-        // Temporary until we have some state management
-        var userInfo = new UserInfo();
-        userInfo.email = splitCreds[0];
-        userInfo.password = splitCreds[1];
-
-        var newMessage = new MessageToSend();
-        newMessage.Sender = userInfo.email;
-        newMessage.Subject = Subject;
-        newMessage.Recipient = SentTo;
-        newMessage.MessageContent = MessageContent; // This is the content we just typed
-
-        if (emailToReplyOrForward != null)
+        bool isValid = Validation.IsEmailValid(SentTo);
+        Debug.WriteLine($"inside send is valid {isValid}");
+        if (!isValid)
         {
-            newMessage.OriginalMessage = emailToReplyOrForward.OriginalMessage; // This is some original message
-        }
+            SentToErrorBackground = "Red";
 
-        MailSender.SendEmail(userInfo, newMessage, isForwardedMsg, isReplyMsg);
-        // TODO: try again in the future, GetParentWindow not found
-        Application.Current?.CloseWindow(Application.Current.Windows[1]);
-        // Application.Current.CloseWindow(GetParentWindow());
+            System.Timers.Timer errorTimer = new System.Timers.Timer(2000);
+            errorTimer.Elapsed += ChangeColorToInitial;
+            errorTimer.AutoReset = false;
+            errorTimer.Enabled = true;
+            errorTimer.Stop();
+            errorTimer.Dispose();
+        } else
+        {
+            // Temporary until we have some state management
+            var userInfo = new UserInfo();
+            userInfo.email = splitCreds[0];
+            userInfo.password = splitCreds[1];
+
+            var newMessage = new MessageToSend();
+            newMessage.Sender = userInfo.email;
+            newMessage.Subject = Subject;
+            newMessage.Recipient = SentTo;
+            newMessage.MessageContent = MessageContent; // This is the content we just typed
+
+            if (emailToReplyOrForward != null)
+            {
+                newMessage.OriginalMessage = emailToReplyOrForward.OriginalMessage; // This is some original message
+            }
+            Debug.WriteLine("Should send");
+            // MailSender.SendEmail(userInfo, newMessage, isForwardedMsg, isReplyMsg);
+            // TODO: try again in the future, GetParentWindow not found
+            Application.Current?.CloseWindow(Application.Current.Windows[1]);
+            // Application.Current.CloseWindow(GetParentWindow());
+        }
     }
 
     static string[] RetrieveCredsFromFile(string filename)
@@ -104,5 +123,10 @@ public partial class NewMessageViewModel : ObservableObject
         string[] splitCreds = FileSystemOperations.SeparateEmailAndPassword(creds);
 
         return splitCreds;
+    }
+
+    private void ChangeColorToInitial(Object source, ElapsedEventArgs e)
+    {
+        SentToErrorBackground = "White";
     }
 }
