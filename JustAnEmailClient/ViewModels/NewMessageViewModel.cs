@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Diagnostics;
-using System.Timers;
 using JustAnEmailClient.Services;
 using JustAnEmailClient.Models;
 using JustAnEmailClient.Helpers;
@@ -86,12 +85,10 @@ public partial class NewMessageViewModel : ObservableObject
         {
             SentToErrorBackground = "Red";
 
-            System.Timers.Timer errorTimer = new System.Timers.Timer(2000);
-            errorTimer.Elapsed += ChangeColorToInitial;
-            errorTimer.AutoReset = false;
-            errorTimer.Enabled = true;
-            errorTimer.Stop();
-            errorTimer.Dispose();
+            TimeoutHelper.SetTimeout(() =>
+            {
+                SentToErrorBackground = "White";
+            }, 2000);
         } else
         {
             // Temporary until we have some state management
@@ -109,8 +106,8 @@ public partial class NewMessageViewModel : ObservableObject
             {
                 newMessage.OriginalMessage = emailToReplyOrForward.OriginalMessage; // This is some original message
             }
-            Debug.WriteLine("Should send");
-            // MailSender.SendEmail(userInfo, newMessage, isForwardedMsg, isReplyMsg);
+
+            MailSender.SendEmail(userInfo, newMessage, isForwardedMsg, isReplyMsg);
             // TODO: try again in the future, GetParentWindow not found
             Application.Current?.CloseWindow(Application.Current.Windows[1]);
             // Application.Current.CloseWindow(GetParentWindow());
@@ -123,10 +120,5 @@ public partial class NewMessageViewModel : ObservableObject
         string[] splitCreds = FileSystemOperations.SeparateEmailAndPassword(creds);
 
         return splitCreds;
-    }
-
-    private void ChangeColorToInitial(Object source, ElapsedEventArgs e)
-    {
-        SentToErrorBackground = "White";
     }
 }
